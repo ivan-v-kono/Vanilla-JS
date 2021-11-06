@@ -1,0 +1,188 @@
+
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title></title>
+</head>
+
+
+<style type="text/css">
+
+.title1 {
+   position: absolute;
+   top: 30%;
+   left: 40%;
+}
+.title2 {
+   position: absolute;
+   top: 35%;
+   left: 40%;
+}
+.main {
+   position: absolute;
+   top: 40%;
+   left: 40%;
+}
+.main .line {
+    clear: both;
+}
+.main .line div {
+    width: 21px;
+    height: 21px;
+    float: left;
+    margin: 1px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    transition: background-color .5s;
+}
+.main .line div.s {
+    background-color: #bbb;
+    transition: background-color .5s;
+}
+.main .line div.r {
+    background-image: url(rabbit.jpg);
+}
+.main .line div.end {
+    background-color: red;
+    transition: background-color .5s;
+}
+</style>
+
+
+<body>
+   <div id="gameover" class="title1" hidden>GAME OVER</div>
+   <div id="score" class="title2" hidden></div>  
+   <div id="main" class="main"></div>
+
+   <script>
+//------ drawing cells ------
+   	for (let i = 0; i < 10; i++) { 
+     		main.insertAdjacentHTML('beforeend', `<div class="line"> 
+                                             <div id="` + `${i}` + `_0" class=""></div>
+                                             <div id="` + `${i}` + `_1" class=""></div>
+                                             <div id="` + `${i}` + `_2" class=""></div>
+                                             <div id="` + `${i}` + `_3" class=""></div>
+                                             <div id="` + `${i}` + `_4" class=""></div>
+                                             <div id="` + `${i}` + `_5" class=""></div>
+                                             <div id="` + `${i}` + `_6" class=""></div>
+                                             <div id="` + `${i}` + `_7" class=""></div>
+                                             <div id="` + `${i}` + `_8" class=""></div>
+                                             <div id="` + `${i}` + `_9" class=""></div>
+                                          </div>`);  
+   }
+
+   const bodyX = [0];
+   const bodyY = [0];
+   let tailX;
+   let tailY;
+   let headX = 0;
+   let headY = 0;
+   let rabbitX = 9;
+   let rabbitY = 9;
+
+   let direction = { 'x': 1,
+                     'y': 0,
+                    };
+   let i = 0;
+
+
+// ------ View -----------
+function draw(y, x, className) {
+	const cell = document.getElementById(`${y}`+ '_' + `${x}`);
+    cell.setAttribute('class', className);
+}
+
+function gameOver() {
+   draw(headY, headX, 'end');
+   clearTimeout(timerId);
+   gameover.removeAttribute('hidden');
+   score.removeAttribute('hidden');
+   score.textContent = 'Your score ' + i;
+}
+
+draw(headY, headX, 's');
+draw(rabbitY, rabbitX, 'r');
+
+
+// ------ Model -------
+function rabbitCoordinate() {
+   return Math.floor(Math.random() * 10);
+}
+
+function chekRabbitCoordinate() {
+   for (let i = 0; i < bodyX.length; i++) {
+      if (bodyX[i] == rabbitX && bodyY[i] == rabbitY) {
+         rabbitX = rabbitCoordinate();
+         rabbitY = rabbitCoordinate();
+         chekRabbitCoordinate();
+      } else continue;
+   }
+return;
+}
+
+const timerId = setInterval (function() {
+
+   headX += direction.x;
+   headY += direction.y;
+
+   if(headX == 10) headX = 0;
+   if(headX == -1) headX = 9;
+   if(headY == 10) headY = 0;
+   if(headY == -1) headY = 9;
+   
+   draw(headY, headX, 's');
+
+   bodyX.push(headX);
+   bodyY.push(headY);
+   
+   if (bodyX.length > 4) {
+      tailX = bodyX[0];
+      tailY = bodyY[0];
+
+      let bodyWhithoutHeadX = bodyX.slice(0, bodyX.length - 3);
+      let bodyWhithoutHeadY = bodyY.slice(0, bodyY.length - 3);
+      
+      for (let i = 0; i < bodyWhithoutHeadX.length - 1; i++) {
+         if (headX == bodyWhithoutHeadX[i] && headY == bodyWhithoutHeadY[i]) {
+           gameOver(); 
+           return;
+         }
+      }
+
+      if (headX === rabbitX && headY === rabbitY) {
+         i++;
+         draw(rabbitY, rabbitX, 's');
+         
+         rabbitX = rabbitCoordinate();
+         rabbitY = rabbitCoordinate();
+
+         chekRabbitCoordinate();
+
+         draw(rabbitY, rabbitX, 'r');
+      }  else {
+            draw(tailY, tailX, ''); 
+            bodyX.shift(); bodyY.shift();
+         }
+	}
+
+}, 600);
+
+
+// ----- Controller -------
+	document.onkeydown = function (event) {
+        if (event.keyCode === 37 && direction.x !==  1) direction = {'x': -1, 'y': 0};
+        
+        if (event.keyCode === 38 && direction.y !==  1) direction = {'x': 0, 'y': -1};
+        if (event.keyCode === 39 && direction.x !== -1) direction = {'x': 1, 'y': 0};
+        if (event.keyCode === 40 && direction.y !== -1) direction = {'x': 0, 'y': 1};
+  };
+</script>
+
+</body>
+
+</html>
+
