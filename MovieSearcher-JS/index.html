@@ -1,0 +1,147 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/a2125ab2e6.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <img id="imgBackground" src="gradient.png" alt="imgBackground">
+    <!-- input form & search btn -->
+    <div class="container ms-0 px-3">
+        <div id="lets" class="offset-1 mb-2 px-0 pt-3 pb-0 fw-bold fs-3">LET'S FIND!</div>
+        <div class="row justify-content-start align-items-center mx-0">
+            <div class="input-group row offset-1 p-0">
+                <input type="text" id="input" class="col-8 col-md-7 col-lg-5 col-xl-4  me-2 p-0 ps-2 border-0 border-bottom rounded-3" placeholder="Search OMDb" > 
+                <button type="button" id="search" class="btn rounded col-2 col-sm-1 m-0 p-0 ps-3 ps-lg-2"  onmouseup="this.blur()"> 
+                    <i id="searchIcon" class="fas fa-search p-2  rounded-3"></i>
+                </button>
+                <div class="invisible col-2 col-sm-3 col-md-4"></div>
+            </div>
+        </div>
+        <!-- radio btn choice -->
+        <form id="radioForm" class="offset-1 mb-3 px-0 pt-3">
+            <div class="form_radio_group row align-items-start justify-content-start px-0">
+                <div class="form_radio_group-item col-auto ms-2 ps-0">
+                    <input type="radio" id="radio-1" name="radio" value="" hidden>
+                    <label for="radio-1" class="p-0 fs-6 fw-bold rounded"><span class="ps-2 pe-1">ALL</span></label>
+                </div>
+                <div class="form_radio_group-item col-auto p-0 pe-2">
+                    <input type="radio" id="radio-2" name="radio" value="&type=movie" hidden>
+                    <label for="radio-2" class="p-0 fs-6 fw-bold rounded"><span class="ps-1 pe-0">MOVIE</span></label>
+                </div>
+                <div class="form_radio_group-item col-auto p-0">
+                    <input type="radio" id="radio-3" name="radio" value="&type=series" hidden>
+                    <label for="radio-3" class="p-0 fs-6 fw-bold rounded"><span class="ps-2">SERIES</span></label>
+                </div>
+            </div>
+        </form>
+        <!-- error message -->
+        <div id="Sorry" class="offset-1 mb-3 px-0 text-warning" hidden></div>
+    </div>
+    <!-- spinner -->
+    <div id="spinnerPlace" class="row justify-content-center my-4 mb-xl-5 mx-0 pt-4" hidden>
+        <div class="loader text-light align-self-start p-0">
+            <div class="inner one"></div>
+            <div class="inner two"></div>
+            <div class="inner three"></div>
+            <span class="fs-5">Loading...</span>
+        </div>
+    </div>
+    <!-- section full description chosen movie -->
+    <div id="movieDescription" class="col-lg-9 w-sm-75 border rounded mb-3 mx-2 p-1 p-sm-2" hidden>
+        <div class="row position-relative g-0">
+            <!-- poster -->
+            <div class="col-11 col-md-5 col-lg-3 ps-2 pe-1">
+                <img id="Poster" class="img-fluid rounded pt-2" src="" alt="...">
+            </div>
+            <!-- btn-close -->
+            <button id="closeDescriptionBtn" type="button" class="btn-close position-absolute top-0 end-0" aria-label="Close" ></button>
+            <div class="col col-md-6 col-lg-8 ps-lg-3 pt-1">
+                <div class="card-body pt-3 pt-sm-3 pt-md-0 ps-2">
+                    <!-- star & imdb rate -->
+                    <div class="row align-items-center justify-content-start ps-2">
+                        <img src="star.svg" alt="" width="24" height="24" class="col-auto px-0">
+                        <span id="imdbRating" class="col-auto m-0 px-1 h6 text-white"></span>
+                        <span class="col-auto m-0 ps-1 h6 text-white">IMDb</span>
+                    </div>
+                    <!-- title, year & plot -->
+                    <h5 id="Title" class="card-title"></h5>
+                    <h6 id="Year" class="card-title col-auto mb-0"></h6>
+                    <p id="Plot" class="card-text col-auto"></p>
+                </div>
+            </div>
+            <!-- more info in toggler -->
+            <div class="container m-0 mt-md-3 ps-2 ps-sm-0 ">
+                <nav class="navbar navbar-dark col col-sm-5 col-lg-3 rounded m-0 p-0">
+                    <div id="nav-cont-blur" class="container-fluid justify-content-start align-items-center">
+                        <button type="button" class="navbar-toggler mb-2 p-2" data-bs-toggle="collapse" data-bs-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon col"></span>
+                        </button>
+                        <div id="info" class="p-2">Full info...</div>
+                    </div>
+                </nav>
+                <div id="navbarToggleExternalContent" class="collapse">
+                    <div id="moreInfo" class="rounded-bottom px-4  pb-2 pt-3">
+                        <div class="row mb-2 border-bottom border-secondary"><strong class="col-5">Rated:</strong><span id="Rated" class="col"></span></div>
+                        <div class="row mb-2 border-bottom border-secondary"><strong class="col-5">Released:</strong><span id="Released" class="col"></span></div>
+                        <div class="row mb-2 border-bottom border-secondary"><strong class="col-5">Runtime:</strong><span id="Runtime" class="col"></span></div>
+                        <div class="row mb-2 border-bottom border-secondary"><strong class="col-5">Genre:</strong><span id="Genre" class="col"></span></div>
+                        <div class="row mb-2 border-bottom border-secondary"><strong class="col-5">Director:</strong><span id="Director" class="col"></span></div>
+                        <div class="row mb-2 border-bottom border-secondary"><strong class="col-5">Writer:</strong><span id="Writer" class="col"></span></div>
+                        <div class="row mb-2 border-bottom border-secondary"><strong class="col-5">Actors:</strong><span id="Actors" class="col"></span></div>
+                        <div class="row mb-2 border-bottom border-secondary"><strong class="col-5">Language:</strong><span id="Language" class="col"></span></div>
+                        <div class="row mb-2 border-bottom border-secondary"><strong class="col-5">Country:</strong><span id="Country" class="col"></span></div>
+                        <div class="row mb-2 border-bottom border-secondary"><strong class="col-5">Awards:</strong><span id="Awards" class="col"></span></div>
+                        <div class="row mb-2"><strong class="col-5">Ratings:</strong></div>
+                        <p class="row mb-2 ps-2"><span class="col-5">Internet Movie Database:</span><span id="Internet Movie Database" class="col ps-2"></span></p>
+                        <p class="row mb-2 ps-2"><span class="col-5">Rotten Tomatoes:</span><span id="Rotten Tomatoes" class="col ps-2"></span></p>
+                        <p class="row mb-2 ps-2"><span class="col-5">Metacritic:</span><span id="Metacritic" class="col ps-2"></span></p>
+                        <p class="row mb-2 ps-2"><span class="col-5">Metascore:</span><span id="Metascore" class="col ps-2"></span></p>
+                        <div class="row mb-2 border-bottom border-secondary"><strong class="col-5">imdbVotes:</strong><span id="imdbVotes" class="col"></span></div>
+                        <div class="row mb-2 border-bottom border-secondary"><strong class="col-5">imdbID:</strong><span id="imdbID" class="col"></span></div>
+                        <div class="row mb-2 border-bottom border-secondary"><strong class="col-5">Type:</strong><span id="Type" class="col"></span></div>
+                        <div class="row mb-2 border-bottom border-secondary"><strong class="col-5">DVD:</strong><span id="DVD" class="col"></span></div>
+                        <div class="row mb-2 border-bottom border-secondary"><strong class="col-5">BoxOffice:</strong><span id="BoxOffice" class="col"></span></div>
+                        <div class="row mb-2 border-bottom border-secondary"><strong class="col-5">Production:</strong><span id="Production" class="col"></span></div>
+                        <div class="row"><strong class="col-5">Website:</strong><span id="Website" class="col"></span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- section movies cards -->
+    <div id="row" class="row justify-content-evenly py-4 mx-0" ></div>
+    <!-- section next/previos page arrow -->
+    <div id="page" class="page pb-5" hidden>
+        <div class="row justify-content-center align-items-center mx-0">
+            <div id="pagePrev" class="col-auto mb-0 me-5 me-xl-3 me-xxl-0 pt-0 pb-2 pe-0 h3"></div>
+            <ul class="pagination pagination-lg justify-content-center col-2 px-0 h4">
+                <li id="prev" class="page-item" > 
+                    <a class="page-lnk me-4 pb-2 ps-1 lh-1" href="#" onfocus="this.blur()">
+                        <span aria-hidden="true">
+                            <i class="fas fa-angle-double-left fs-2"></i>
+                        </span>
+                    </a>
+                </li>
+                <li id="next" class="page-item" > 
+                    <a class="page-lnk ms-4 pb-2 pe-1 lh-1" href="#" onfocus="this.blur()">
+                        <span aria-hidden="true">
+                            <i class="fas fa-angle-double-right fs-2"></i>
+                        </span>
+                    </a>
+                </li>
+            </ul>
+            <div id="pageNext" class="col-auto ms-5 ms-xl-3 ms-xxl-0 mb-0 pt-0 pb-2 ps-0 h4"></div>
+        </div>
+    </div>
+    <!-- outer scripts -->
+    <script type="module" src="index.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</body>
+
+</html>
